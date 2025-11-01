@@ -72,12 +72,14 @@ func win_game():
 		# VÉRIFIER SI LE NIVEAU SUIVANT EXISTE AVANT DE CONTINUER
 		if ResourceLoader.exists(next_level_path):
 			
+			SaveSystem.save_last_level(next_level_number)
 			Engine.time_scale = 0.1
 			print("WIN! Prochain niveau : ", next_level_path)
 			timer.start()
 		else:
 			load_music(music_winAll)
 			%sfx_music.play()
+			SaveSystem.save_last_level(1)
 			# Si le niveau suivant n'existe pas, aller directement au niveau 1
 			Engine.time_scale = 0.1
 			print("Félicitations ! Tu as terminé tous les niveaux !")
