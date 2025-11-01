@@ -3,7 +3,7 @@ extends Node
 
 @onready var level_label: Label = $levelLabel
 var save_system
-
+@export var levelChoices = 1
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	# Créer une instance de SaveSystem si on n'utilise pas l'autoload
@@ -37,7 +37,7 @@ func _input(event):
 
 func restart_from_level_one():
 	# Sauvegarder le niveau 1
-	save_system.save_last_level(1)
+	save_system.save_last_level(levelChoices)
 	
 	# Redémarrer au niveau 1
 	get_tree().change_scene_to_file("res://levels/level_1.tscn")
