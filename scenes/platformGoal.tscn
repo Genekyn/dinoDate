@@ -1,0 +1,95 @@
+[gd_scene load_steps=13 format=3 uid="uid://c7ywnj2tip8ok"]
+
+[ext_resource type="Script" uid="uid://ccfidemgg7krn" path="res://script/platform_goal.gd" id="1_2r808"]
+[ext_resource type="Texture2D" uid="uid://vex6igd5aodw" path="res://assets/Tiles/PlatformGoal.png" id="1_s76a4"]
+[ext_resource type="AudioStream" uid="uid://d35o5p7qjgxx0" path="res://sfx/AlmostWin.wav" id="2_bhwxq"]
+[ext_resource type="AudioStream" uid="uid://xcr5cn0kf5gw" path="res://sfx/Win.wav" id="3_di4c3"]
+[ext_resource type="AudioStream" uid="uid://c174o64loqi81" path="res://music/Victory MusicFF.mp3" id="4_di4c3"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2r808"]
+size = Vector2(50, 5)
+
+[sub_resource type="Gradient" id="Gradient_2r808"]
+offsets = PackedFloat32Array(0, 0.67948717)
+colors = PackedColorArray(0.6955032, 0.6955031, 0.6955031, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_npmcx"]
+gradient = SubResource("Gradient_2r808")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="Gradient" id="Gradient_bhwxq"]
+offsets = PackedFloat32Array(0, 0.67948717)
+colors = PackedColorArray(0.6955032, 0.6955031, 0.6955031, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_di4c3"]
+gradient = SubResource("Gradient_bhwxq")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_npmcx"]
+size = Vector2(50, 39)
+
+[sub_resource type="AudioStream" id="AudioStream_2r808"]
+
+[node name="Goal" type="Area2D"]
+collision_mask = 7
+script = ExtResource("1_2r808")
+sfx_almost_win = ExtResource("2_bhwxq")
+sfx_win = ExtResource("3_di4c3")
+music_winAll = ExtResource("4_di4c3")
+
+[node name="AnimatableBody2D" type="AnimatableBody2D" parent="."]
+collision_layer = 7
+
+[node name="Sprite2D" type="Sprite2D" parent="AnimatableBody2D"]
+texture = ExtResource("1_s76a4")
+region_enabled = true
+region_rect = Rect2(55.04309, 77.97459, 53.518547, 12.710236)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AnimatableBody2D"]
+position = Vector2(0, -2.5)
+shape = SubResource("RectangleShape2D_2r808")
+one_way_collision = true
+
+[node name="PointLightBlue" type="PointLight2D" parent="AnimatableBody2D"]
+position = Vector2(-25, 0)
+color = Color(0.101960786, 0.78039217, 0.8509804, 1)
+energy = 1.1
+texture = SubResource("GradientTexture2D_npmcx")
+texture_scale = 1.5
+
+[node name="PointLight" type="PointLight2D" parent="AnimatableBody2D"]
+color = Color(3.3691526e-06, 0.6103915, 0.22194725, 1)
+energy = 1.1
+texture = SubResource("GradientTexture2D_npmcx")
+texture_scale = 3.0
+
+[node name="PointLightYellow" type="PointLight2D" parent="AnimatableBody2D"]
+position = Vector2(25, 0)
+color = Color(0.84313726, 0.4627451, 0.2627451, 1)
+energy = 1.1
+texture = SubResource("GradientTexture2D_di4c3")
+texture_scale = 1.5
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -19.5)
+shape = SubResource("RectangleShape2D_npmcx")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.25
+one_shot = true
+
+[node name="sfx_player" type="AudioStreamPlayer2D" parent="."]
+unique_name_in_owner = true
+stream = SubResource("AudioStream_2r808")
+bus = &"SFX"
+
+[node name="sfx_music" type="AudioStreamPlayer2D" parent="."]
+unique_name_in_owner = true
+stream = SubResource("AudioStream_2r808")
+bus = &"Win"
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="body_exited" from="." to="." method="_on_body_exited"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

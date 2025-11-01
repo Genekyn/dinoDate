@@ -1,0 +1,71 @@
+[gd_scene load_steps=8 format=3 uid="uid://cx8ab7i6ajksc"]
+
+[ext_resource type="Script" uid="uid://bqfph8wj0qkmh" path="res://script/platformsBlink.gd" id="1_84w40"]
+[ext_resource type="Texture2D" uid="uid://c72fef0mrcvti" path="res://assets/Tiles/Platforms.png" id="3_xypom"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4fcmg"]
+size = Vector2(48, 5)
+
+[sub_resource type="Gradient" id="Gradient_kckhd"]
+offsets = PackedFloat32Array(0, 0.67948717)
+colors = PackedColorArray(0.6955032, 0.6955031, 0.6955031, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_84w40"]
+gradient = SubResource("Gradient_kckhd")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="Gradient" id="Gradient_344u2"]
+offsets = PackedFloat32Array(0, 0.67948717)
+colors = PackedColorArray(0.6955032, 0.6955031, 0.6955031, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_hvk68"]
+gradient = SubResource("Gradient_344u2")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
+[node name="platformsHorizBlink" type="Node2D"]
+script = ExtResource("1_84w40")
+switchPlatform = 2.0
+
+[node name="Timer" type="Timer" parent="."]
+
+[node name="AnimatableBlue2D" type="AnimatableBody2D" parent="."]
+collision_layer = 2
+collision_mask = 0
+
+[node name="BlueSprite" type="Sprite2D" parent="AnimatableBlue2D"]
+texture = ExtResource("3_xypom")
+region_enabled = true
+region_rect = Rect2(63.921944, 26.908403, 48.250076, 12.23258)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AnimatableBlue2D"]
+position = Vector2(0, -3.5)
+shape = SubResource("RectangleShape2D_4fcmg")
+
+[node name="PointLight2D" type="PointLight2D" parent="AnimatableBlue2D"]
+color = Color(0.101960786, 0.78039217, 0.8509804, 1)
+energy = 1.1
+texture = SubResource("GradientTexture2D_84w40")
+texture_scale = 3.0
+
+[node name="AnimatableYellow2D" type="AnimatableBody2D" parent="."]
+collision_layer = 4
+collision_mask = 0
+
+[node name="YellowSprite" type="Sprite2D" parent="AnimatableYellow2D"]
+texture = ExtResource("3_xypom")
+region_enabled = true
+region_rect = Rect2(63.921944, 46.90169, 48.250076, 12.387802)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AnimatableYellow2D"]
+position = Vector2(0, -3.5)
+shape = SubResource("RectangleShape2D_4fcmg")
+
+[node name="PointLight2D" type="PointLight2D" parent="AnimatableYellow2D"]
+color = Color(0.84313726, 0.4627451, 0.2627451, 1)
+energy = 1.1
+texture = SubResource("GradientTexture2D_hvk68")
+texture_scale = 3.0
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

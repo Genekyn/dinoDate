@@ -1,0 +1,17 @@
+[gd_scene load_steps=2 format=3 uid="uid://de0rxsvq4aejr"]
+
+[sub_resource type="GDScript" id="GDScript_ieejg"]
+script/source = "# New file: res://script/level_label.gd
+extends Node2D
+
+@onready var label: Label = $Label
+
+func set_level_name(level_name: String):
+	label.text = level_name
+
+func set_level_number(level_number: int):
+	label.text = \"Niveau \" + str(level_number)
+"
+
+[node name="Node2D" type="Node2D"]
+script = SubResource("GDScript_ieejg")

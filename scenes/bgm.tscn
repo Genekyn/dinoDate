@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://ca1t1txgnhoc3"]
+
+[ext_resource type="AudioStream" uid="uid://bpkkfy7mm35nf" path="res://music/dungeon02.ogg" id="1_q5y64"]
+
+[node name="BGM" type="AudioStreamPlayer2D"]
+stream = ExtResource("1_q5y64")
+autoplay = true
+bus = &"BGM"

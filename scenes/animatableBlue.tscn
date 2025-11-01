@@ -1,0 +1,33 @@
+[gd_scene load_steps=5 format=3 uid="uid://bfj2crm1xsana"]
+
+[ext_resource type="Texture2D" uid="uid://c72fef0mrcvti" path="res://assets/Tiles/Platforms.png" id="1_x1bev"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gvajt"]
+size = Vector2(48, 5)
+
+[sub_resource type="Gradient" id="Gradient_kckhd"]
+offsets = PackedFloat32Array(0, 0.67948717)
+colors = PackedColorArray(0.6955032, 0.6955031, 0.6955031, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_db22s"]
+gradient = SubResource("Gradient_kckhd")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
+[node name="AnimatableBody2D" type="AnimatableBody2D"]
+collision_layer = 2
+collision_mask = 0
+
+[node name="BlueSprite" type="Sprite2D" parent="."]
+texture = ExtResource("1_x1bev")
+region_enabled = true
+region_rect = Rect2(63.921944, 26.908403, 48.250076, 12.23258)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -3.5)
+shape = SubResource("RectangleShape2D_gvajt")
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+color = Color(0.101960786, 0.78039217, 0.8509804, 1)
+texture = SubResource("GradientTexture2D_db22s")
+texture_scale = 3.0

@@ -1,0 +1,159 @@
+[gd_scene load_steps=21 format=3 uid="uid://drsjkkhgj4kdm"]
+
+[ext_resource type="Texture2D" uid="uid://cj4nt1hf18lm6" path="res://assets/sheets/DinoSprites - doux-Recolor.png" id="1_5g46b"]
+[ext_resource type="Script" uid="uid://ur1mpcknpjbl" path="res://script/player_oneMovement.gd" id="1_jjvma"]
+[ext_resource type="AudioStream" uid="uid://df5137cf263u8" path="res://sfx/30_Jump_03.wav" id="2_67mun"]
+[ext_resource type="AudioStream" uid="uid://d3taneuyrhqwu" path="res://sfx/08_Step_rock_02.wav" id="3_2pt5b"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jjvma"]
+atlas = ExtResource("1_5g46b")
+region = Rect2(0, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2ye1c"]
+atlas = ExtResource("1_5g46b")
+region = Rect2(24, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_67mun"]
+atlas = ExtResource("1_5g46b")
+region = Rect2(48, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2pt5b"]
+atlas = ExtResource("1_5g46b")
+region = Rect2(72, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3v6dx"]
+atlas = ExtResource("1_5g46b")
+region = Rect2(192, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_g53jo"]
+atlas = ExtResource("1_5g46b")
+region = Rect2(168, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6sjib"]
+atlas = ExtResource("1_5g46b")
+region = Rect2(144, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_44md6"]
+atlas = ExtResource("1_5g46b")
+region = Rect2(96, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ahow2"]
+atlas = ExtResource("1_5g46b")
+region = Rect2(120, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_py4p2"]
+atlas = ExtResource("1_5g46b")
+region = Rect2(144, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_do4gr"]
+atlas = ExtResource("1_5g46b")
+region = Rect2(168, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yel2g"]
+atlas = ExtResource("1_5g46b")
+region = Rect2(192, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2lnpm"]
+atlas = ExtResource("1_5g46b")
+region = Rect2(216, 0, 24, 24)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_n4nfk"]
+animations = [{
+"frames": [],
+"loop": true,
+"name": &"crouch",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jjvma")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2ye1c")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_67mun")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2pt5b")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3v6dx")
+}],
+"loop": true,
+"name": &"jumpDown",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_g53jo")
+}],
+"loop": true,
+"name": &"jumpNeutral",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6sjib")
+}],
+"loop": true,
+"name": &"jumpUp",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_44md6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ahow2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_py4p2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_do4gr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yel2g")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2lnpm")
+}],
+"loop": true,
+"name": &"run",
+"speed": 10.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lbcfs"]
+size = Vector2(12, 15)
+
+[sub_resource type="AudioStream" id="AudioStream_67mun"]
+
+[node name="PlayerOne" type="CharacterBody2D" groups=["blueDino"]]
+collision_layer = 514
+collision_mask = 515
+script = ExtResource("1_jjvma")
+sfx_jump = ExtResource("2_67mun")
+sfx_footstep = ExtResource("3_2pt5b")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." groups=["blueDino"]]
+sprite_frames = SubResource("SpriteFrames_n4nfk")
+animation = &"run"
+autoplay = "idle"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 1.5)
+shape = SubResource("RectangleShape2D_lbcfs")
+
+[node name="sfx_player" type="AudioStreamPlayer2D" parent="."]
+unique_name_in_owner = true
+stream = SubResource("AudioStream_67mun")
+bus = &"SFX"
+
+[connection signal="animation_changed" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_changed"]
+[connection signal="frame_changed" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_frame_changed"]
