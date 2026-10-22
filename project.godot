@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="DinoDate"
-run/main_scene="uid://dug1uwx42fap3"
+run/main_scene="uid://bdm1b4sp3cntu"
 config/features=PackedStringArray("4.5", "Forward Plus")
 config/icon="res://icon.svg"
 
