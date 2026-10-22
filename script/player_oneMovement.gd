@@ -2,7 +2,7 @@ extends CharacterBody2D
 
 const MAX_SPEED = 150.0
 const SPEED = 500.0
-const DECELERATION = 650.0
+const DECELERATION = 700.0
 const JUMP_VELOCITY = -350.0
 
 @export var sfx_jump : AudioStream
