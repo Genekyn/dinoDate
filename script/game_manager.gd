@@ -1,11 +1,25 @@
 # res://script/game_manager.gd
 extends Node
 
+const MAIN_MENU_PATH := "res://scenes/main_menu.tscn"
+const LABEL_SCREEN_POSITION := Vector2(40, 30)
+const LABEL_FONT_SIZE := 48
+
 @onready var level_label: Label = $levelLabel
 var save_system
+
 @export var levelChoices = 1
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+
+
+	# Fixe le label à l'écran, sinon sa position dépend de la caméra du niveau
+	var hud := CanvasLayer.new()
+	add_child(hud)
+	level_label.reparent(hud, false)
+	level_label.position = LABEL_SCREEN_POSITION
+	level_label.add_theme_font_size_override("font_size", LABEL_FONT_SIZE)
+
 	# Créer une instance de SaveSystem si on n'utilise pas l'autoload
 	save_system = load("res://script/save_system.gd").new()
 	add_child(save_system)
@@ -32,13 +46,13 @@ func _ready() -> void:
 		level_label.text = "Level " + str(current_level_number)
 # Gérer l'input pour redémarrer au niveau 1
 func _input(event):
-	if event.is_action_pressed("restartGame"):
-		restart_from_level_one()
+	if event.is_action_pressed("openMenu"):
+		open_main_menu()
 
-func restart_from_level_one():
+func open_main_menu():
 	# Sauvegarder le niveau 1
-	save_system.save_last_level(levelChoices)
+	Engine.time_scale = 1.0
 	
 	# Redémarrer au niveau 1
-	get_tree().change_scene_to_file("res://levels/level_1.tscn")
-	print("Redémarrage au niveau 1")
+	get_tree().change_scene_to_file(MAIN_MENU_PATH)
+	print("Menu principal ouvert.")
