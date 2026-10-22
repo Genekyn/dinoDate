@@ -1,0 +1,24 @@
+{
+  "outputStyle": "Explanatory",
+  "permissions": {
+    "defaultMode": "default",
+    "allow": [
+      "Bash(git status)",
+      "Bash(git diff *)",
+      "Bash(git log *)",
+      "Bash(git branch --show-current)",
+      "Bash(godot --headless --path . --quit)",
+      "Bash(godot --headless --path . --check-only *)",
+      "Bash(ls *)"
+    ],
+    "deny": [
+      "Bash(git push *)",
+      "Bash(git reset *)",
+      "Bash(git clean *)",
+      "Bash(git checkout -- *)",
+      "Bash(rm -rf *)",
+      "Edit(./addons/**)",
+      "Edit(./index.*)"
+    ]
+  }
+}

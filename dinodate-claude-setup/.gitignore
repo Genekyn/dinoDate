@@ -1,0 +1,7 @@
+# Godot 4+ specific ignores
+.godot/
+/android/
+
+# Claude Code : réglages et notes personnels (non partagés)
+.claude/settings.local.json
+CLAUDE.local.md
