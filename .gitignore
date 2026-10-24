@@ -1,3 +1,7 @@
 # Godot 4+ specific ignores
 .godot/
 /android/
+
+# Builds exportés (le .gdignore empêche Godot d importer ce dossier)
+/build/*
+!/build/.gdignore
