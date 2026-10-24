@@ -15,6 +15,7 @@ var orangeOnGoal := false
 
 var first_level_path = "res://levels/level_1.tscn"
 var next_level_path := ""
+var _has_won := false
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	point_light_blue.enabled = false
@@ -28,6 +29,7 @@ func _reset_goal_state():
 	blueOnGoal = false
 	orangeOnGoal = false
 	next_level_path = ""
+	_has_won = false
 
 
 func _on_body_entered(body: Node2D) -> void:
@@ -55,38 +57,70 @@ func _on_body_exited(body: Node2D) -> void:
 		point_light_yellow.enabled = false
 		print ("Dino Orange n'est plus sur le goal")
 func win_game():
-	if blueOnGoal and orangeOnGoal:
-		point_light.enabled = true
-		load_sfx(sfx_win)
-		%sfx_player.play()
-		var current_scene_file = get_tree().current_scene.scene_file_path
-		
-		# Extraire correctement le numéro du niveau
-		var file_name = current_scene_file.get_file()  # "level_1.tscn"
-		var level_number_str = file_name.trim_prefix("level_").trim_suffix(".tscn")  # "1"
-		var current_level_number = level_number_str.to_int()
-		var next_level_number = current_level_number + 1
-		
-		next_level_path = FILE_BEGIN + str(next_level_number) + ".tscn"
-		
-		# VÉRIFIER SI LE NIVEAU SUIVANT EXISTE AVANT DE CONTINUER
-		if ResourceLoader.exists(next_level_path):
-			
-			SaveSystem.save_last_level(next_level_number)
-			Engine.time_scale = 0.1
-			print("WIN! Prochain niveau : ", next_level_path)
-			timer.start()
-		else:
-			load_music(music_winAll)
-			%sfx_music.play()
-			SaveSystem.save_last_level(1)
-			# Si le niveau suivant n'existe pas, aller directement au niveau 1
-			Engine.time_scale = 0.1
-			print("Félicitations ! Tu as terminé tous les niveaux !")
-			print("Retour au niveau 1")
-			next_level_path = first_level_path
-			timer.start()
-		
+	# _has_won évite de compter la victoire deux fois si un dino sort puis
+	# revient sur le goal pendant le ralenti (sinon : 2 temps enregistrés).
+	if not (blueOnGoal and orangeOnGoal) or _has_won:
+		return
+	_has_won = true
+	point_light.enabled = true
+	load_sfx(sfx_win)
+	%sfx_player.play()
+
+	var current_level_number := GameMode.level_number_of(get_tree().current_scene)
+	var next_level_number := current_level_number + 1
+	var has_next_level := ResourceLoader.exists(GameMode.level_path(next_level_number))
+
+	# Chaque mode réagit différemment à la victoire (voir game_mode.gd)
+	match GameMode.mode:
+		GameMode.Mode.NORMAL:
+			_win_normal(current_level_number, has_next_level)
+		GameMode.Mode.SPEEDRUN:
+			_win_speedrun(next_level_number, has_next_level)
+		GameMode.Mode.TIME_ATTACK:
+			_win_time_attack(current_level_number, next_level_number, has_next_level)
+
+	# Ralenti de victoire, puis _on_timer_timeout() charge next_level_path
+	Engine.time_scale = 0.1
+	timer.start()
+
+
+# Mode normal : comportement d'origine + on enregistre les déblocages.
+func _win_normal(current_level_number: int, has_next_level: bool) -> void:
+	SaveSystem.mark_level_completed(current_level_number)
+	if has_next_level:
+		SaveSystem.save_last_level(current_level_number + 1)
+		next_level_path = GameMode.level_path(current_level_number + 1)
+	else:
+		# Les 16 niveaux sont finis : on débloque le speedrun
+		SaveSystem.set_game_completed()
+		SaveSystem.save_last_level(1)
+		load_music(music_winAll)
+		%sfx_music.play()
+		next_level_path = first_level_path
+
+
+# Speedrun : on enchaîne sans arrêter le chrono, et on enregistre à la fin.
+func _win_speedrun(next_level_number: int, has_next_level: bool) -> void:
+	if has_next_level:
+		next_level_path = GameMode.level_path(next_level_number)
+		return
+	var total_ms := GameMode.stop_timer()
+	Leaderboard.submit_score(Leaderboard.SPEEDRUN_CATEGORY, SaveSystem.get_player_name(), total_ms)
+	load_music(music_winAll)
+	%sfx_music.play()
+	next_level_path = GameMode.LEADERBOARD_PATH  # on montre le classement
+
+
+# Contre-la-montre : on enregistre le temps du niveau, puis soit on enchaîne
+# (si l'option est cochée et que le niveau suivant est débloqué), soit on
+# revient à l'écran de choix.
+func _win_time_attack(current_level_number: int, next_level_number: int, has_next_level: bool) -> void:
+	var level_ms := GameMode.stop_timer()
+	Leaderboard.submit_score(Leaderboard.level_category(current_level_number), SaveSystem.get_player_name(), level_ms)
+	if GameMode.chain_levels and has_next_level and SaveSystem.is_level_unlocked(next_level_number):
+		next_level_path = GameMode.level_path(next_level_number)
+	else:
+		next_level_path = GameMode.LEVEL_SELECT_PATH
 
 
 func _on_timer_timeout() -> void:
