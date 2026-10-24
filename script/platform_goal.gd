@@ -96,7 +96,8 @@ func _win_normal(current_level_number: int, has_next_level: bool) -> void:
 		SaveSystem.save_last_level(1)
 		load_music(music_winAll)
 		%sfx_music.play()
-		next_level_path = first_level_path
+		# Retour au menu, où le Speedrun vient d'être débloqué
+		next_level_path = GameMode.MAIN_MENU_PATH
 
 
 # Speedrun : on enchaîne sans arrêter le chrono, et on enregistre à la fin.
