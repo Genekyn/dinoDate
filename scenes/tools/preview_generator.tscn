@@ -1,6 +1,6 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://dfwbdqxy38nb0"]
 
-[ext_resource type="Script" path="res://script/tools/preview_generator.gd" id="1_prev"]
+[ext_resource type="Script" uid="uid://bgsshuhy2625v" path="res://script/tools/preview_generator.gd" id="1_prev"]
 
-[node name="PreviewGenerator" type="Node"]
+[node name="PreviewGenerator" type="Node" unique_id=2081214845]
 script = ExtResource("1_prev")
